@@ -1,4 +1,7 @@
-apply plugin: 'com.github.dcendents.android-maven'
+// This auxiliary script previously applied the deprecated
+// `com.github.dcendents.android-maven` plugin to publish artifacts. The plugin
+// is no longer used in the project to avoid dependency on outdated Gradle
+// APIs that triggered BuildCompletionListener-related errors.
 
 group = publishedGroupId                               // Maven Group ID for the artifact
 

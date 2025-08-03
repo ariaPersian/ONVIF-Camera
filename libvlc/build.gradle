@@ -1,6 +1,9 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-group = 'com.github.pedroSG94'
+
+// Remove the deprecated `android-maven` plugin which required unavailable
+// Gradle internals and caused build failures. Publishing is not needed for the
+// library inside this repository, so the plugin and its `group` declaration
+// have been omitted.
 
 android {
   compileSdkVersion 27
