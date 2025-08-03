@@ -4,7 +4,11 @@ buildscript {
     ext.kotlin_version = '1.2.30'
     repositories {
         google()
-        jcenter()
+        mavenCentral()
+        // jcenter() has been removed in recent Gradle versions; use the legacy
+        // repository URL directly to resolve any remaining dependencies that
+        // were historically hosted there.
+        maven { url 'https://jcenter.bintray.com/' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.0'
@@ -21,7 +25,8 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
+        maven { url 'https://jcenter.bintray.com/' }
     }
 }
 
