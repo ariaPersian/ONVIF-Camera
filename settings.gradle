@@ -1,1 +1,21 @@
+import org.gradle.util.GradleVersion
+
+// The build relies on the Android Gradle plugin 3.1.0 which only works with
+// Gradle 4.x and a Java 8 runtime.  Running the project with a newer Gradle
+// distribution (for example the one bundled with recent Android Studio
+// releases) leads to startup failures such as:
+//
+//   "Could not create an instance of type com.android.build.gradle.AppExtension"
+//
+// Provide a clearer error message when a newer Gradle version is detected so
+// developers know to use the bundled `./gradlew` script together with a JDK 8
+// installation.
+if (GradleVersion.current() >= GradleVersion.version('5.0')) {
+    throw new GradleException(
+        "Unsupported Gradle version ${GradleVersion.current()}. " +
+        "Run the project using the provided ./gradlew script and a JDK 8 runtime."
+    )
+}
+
 include ':app', ':onvifcamera', ':libvlc', ':pedrovlc'
+
