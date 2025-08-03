@@ -28,6 +28,7 @@
                 "screenSize|smallestScreenSize|screenLayout|orientation"
 
             ></activity>
+        <activity android:name="com.rvirin.onvif.demo.TileActivity" />
     </application>
 
 </manifest>

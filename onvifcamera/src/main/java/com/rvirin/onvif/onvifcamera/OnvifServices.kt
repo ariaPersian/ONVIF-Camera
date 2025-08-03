@@ -9,6 +9,7 @@ import java.io.StringReader
 import com.rvirin.onvif.onvifcamera.OnvifRequest.Type.GetDeviceInformation
 import com.rvirin.onvif.onvifcamera.OnvifRequest.Type.GetProfiles
 import com.rvirin.onvif.onvifcamera.OnvifRequest.Type.GetStreamURI
+import com.rvirin.onvif.onvifcamera.OnvifRequest.Type.PtzContinuousMove
 import java.net.MalformedURLException
 import java.net.URL
 
@@ -49,6 +50,9 @@ class OnvifServices {
                             val uri = retrieveXAddr(xpp)
                             paths.profiles = retrievePath(uri)
                             paths.streamURI = retrievePath(uri)
+                        } else if (currentNamespace == PtzContinuousMove.namespace()) {
+                            val uri = retrieveXAddr(xpp)
+                            paths.ptz = retrievePath(uri)
                         }
                     }
 
