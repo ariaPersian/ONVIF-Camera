@@ -1,4 +1,8 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+//
+// NOTE: The Android Gradle plugin (3.1.0) and Kotlin plugin (1.2.30) used in this
+// project do not support running on Java 21. Use Java 8 (or another compatible
+// version) to avoid build failures.
 
 buildscript {
     ext.kotlin_version = '1.2.30'
