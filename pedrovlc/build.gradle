@@ -1,6 +1,10 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-group = 'com.github.pedroSG94'
+
+// The original build used the deprecated `android-maven` plugin to publish
+// artifacts. It depends on Gradle internals that are no longer available and
+// triggered "Unable to load class 'org.gradle.initialization.BuildCompletionListener'".
+// Since publishing is not required for building or running the sample, the
+// plugin and associated `group` declaration have been removed.
 
 android {
     compileSdkVersion 27
