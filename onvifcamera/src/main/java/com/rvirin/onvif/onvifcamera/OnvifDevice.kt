@@ -10,6 +10,7 @@ import com.rvirin.onvif.onvifcamera.OnvifMediaProfiles.Companion.getProfilesComm
 import com.rvirin.onvif.onvifcamera.OnvifMediaStreamURI.Companion.getStreamURICommand
 import com.rvirin.onvif.onvifcamera.OnvifMediaStreamURI.Companion.parseStreamURIXML
 import com.rvirin.onvif.onvifcamera.OnvifServices.Companion.servicesCommand
+import com.rvirin.onvif.onvifcamera.OnvifPTZ
 import com.rvirin.onvif.onvifcamera.OnvifXMLBuilder.envelopeEnd
 import com.rvirin.onvif.onvifcamera.OnvifXMLBuilder.soapHeader
 import okhttp3.MediaType
@@ -43,12 +44,14 @@ class OnvifRequest(val xmlCommand: String, val type: Type) {
         GetServices,
         GetDeviceInformation,
         GetProfiles,
-        GetStreamURI;
+        GetStreamURI,
+        PtzContinuousMove;
 
         fun namespace(): String {
             when (this) {
                 GetServices, GetDeviceInformation -> return "http://www.onvif.org/ver10/device/wsdl"
                 GetProfiles, GetStreamURI -> return "http://www.onvif.org/ver20/media/wsdl"
+                PtzContinuousMove -> return "http://www.onvif.org/ver20/ptz/wsdl"
             }
         }
     }
@@ -63,6 +66,7 @@ class OnvifCameraPaths {
     var deviceInformation = "/onvif/device_service"
     var profiles = "/onvif/device_service"
     var streamURI = "/onvif/device_service"
+    var ptz = "/onvif/ptz_service"
 }
 
 /**
@@ -146,6 +150,11 @@ class OnvifDevice(val ipAddress: String, @JvmField val username: String, @JvmFie
 
     fun getStreamURI(profile: MediaProfile) {
         val request = OnvifRequest(getStreamURICommand(profile), OnvifRequest.Type.GetStreamURI)
+        ONVIFcommunication().execute(request)
+    }
+
+    fun ptzContinuousMove(profileToken: String, pan: Float, tilt: Float, zoom: Float) {
+        val request = OnvifRequest(OnvifPTZ.continuousMoveCommand(profileToken, pan, tilt, zoom), OnvifRequest.Type.PtzContinuousMove)
         ONVIFcommunication().execute(request)
     }
 
@@ -250,6 +259,7 @@ class OnvifDevice(val ipAddress: String, @JvmField val username: String, @JvmFie
                 OnvifRequest.Type.GetDeviceInformation -> return currentDevice.paths.deviceInformation
                 OnvifRequest.Type.GetProfiles -> return currentDevice.paths.profiles
                 OnvifRequest.Type.GetStreamURI -> return currentDevice.paths.streamURI
+                OnvifRequest.Type.PtzContinuousMove -> return currentDevice.paths.ptz
             }
         }
 
@@ -343,6 +353,8 @@ class OnvifDevice(val ipAddress: String, @JvmField val username: String, @JvmFie
                     currentDevice.rtspURI = appendCredentials(streamURI)
                     parsedResult = "RTSP URI retrieved."
                 }
+            } else if (result.request.type == OnvifRequest.Type.PtzContinuousMove) {
+                parsedResult = "PTZ command sent."
             }
         }
 
